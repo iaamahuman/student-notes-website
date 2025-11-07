@@ -1,7 +1,7 @@
 "use client";
 import ProductCard from "@/components/product-card";
 import { Separator } from "@/components/ui/separator";
-import axios from "axios";
+import { api } from "@/lib/api";
 import { Star } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useRouter } from "next/navigation";
@@ -30,7 +30,7 @@ const Featured = () => {
   }, [loading]);
   const getData = async (): Promise<void> => {
     try {
-      const resp = await axios.post("/api/product/getproducts");
+      const resp = await api.post("/product/getproducts");
       setProducts(resp.data);
       setLoading(false);
       toast.dismiss();

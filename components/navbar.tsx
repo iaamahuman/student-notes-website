@@ -22,7 +22,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { setCartData, setOrderData, setUserData } from "@/redux/actions";
-import axios from "axios";
+import { api } from "@/lib/api";
 import { Cart, CartProduct, InitialState, Order } from "@/redux/types";
 import Image from "next/image";
 import { toast } from "react-hot-toast";
@@ -38,7 +38,7 @@ const Navbar = () => {
   useEffect(() => {
     const getUserTokenData = async () => {
       try {
-        const resp = await axios.get("/api/auth/user");
+        const resp = await api.get("/auth/user");
         dispatch(
           setUserData({
             name: resp.data.user.name,
@@ -56,7 +56,7 @@ const Navbar = () => {
 
   const logoutHandler = async () => {
     try {
-      await axios.get("/api/auth/logout");
+      await api.get("/auth/logout");
       toast.dismiss();
     } catch (error: any) {
       toast.dismiss();
@@ -65,7 +65,7 @@ const Navbar = () => {
 
   useEffect(() => {
     const getCartDataFromDB = async () => {
-      const resp = await axios.post(`/api/cart/get/${userData.id}`);
+      const resp = await api.post(`/cart/get/${userData.id}`);
       if (resp.data !== "Cart not found") {
         dispatch(setCartData(resp.data));
       }
@@ -75,7 +75,7 @@ const Navbar = () => {
 
   const updateCartInDatabase = async (data: any) => {
     try {
-      await axios.post(`/api/cart/update/${cartData.id}`, data);
+      await api.post(`/cart/update/${cartData.id}`, data);
     } catch (error) {
       toast.error("Error In Saving Cart!");
     }

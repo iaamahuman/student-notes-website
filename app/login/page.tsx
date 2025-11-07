@@ -13,7 +13,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import axios from "axios";
+import { api } from "@/lib/api";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
@@ -37,7 +37,7 @@ const Login = () => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     toast.loading("Logging In..");
     try {
-      const resp = await axios.post("/api/auth/login", values);
+      const resp = await api.post("/auth/login", values);
       toast.success("Login Successfull");
       dispatch(setUserData(resp.data.user));
       toast.dismiss();

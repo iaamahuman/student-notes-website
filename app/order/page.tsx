@@ -3,7 +3,7 @@ import StripePaymentForm from "@/components/StripeForm";
 import { Button } from "@/components/ui/button";
 import { setCartData } from "@/redux/actions";
 import { InitialState, OrderProduct } from "@/redux/types";
-import axios from "axios";
+import { api } from "@/lib/api";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
@@ -38,7 +38,7 @@ const Order = () => {
 
   useEffect(() => {
     const getUserProfile = async () => {
-      const resp = await axios.post("/api/profile/get", {
+      const resp = await api.post("/profile/get", {
         id: userData.id,
       });
       setUserProfile(resp.data.user);

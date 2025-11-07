@@ -1,7 +1,7 @@
 "use client";
 import ProductLoadingSkeleton from "@/components/ProductLoadingSkeleton";
 import ProductCard from "@/components/product-card";
-import axios from "axios";
+import { api } from "@/lib/api";
 import { Input } from "@/components/ui/input";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
@@ -46,7 +46,7 @@ const Products = () => {
   useEffect(() => {
     const getData = async () => {
       try {
-        const { data } = await axios.post("/api/product/getproducts");
+        const { data } = await api.post("/product/getproducts");
         setData(data);
         setBackupData(data);
         setLoading(false);

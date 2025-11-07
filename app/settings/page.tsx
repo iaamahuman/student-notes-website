@@ -1,7 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { InitialState } from "@/redux/types";
-import axios from "axios";
+import { api } from "@/lib/api";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import toast from "react-hot-toast";
@@ -29,7 +29,7 @@ const Settings = () => {
   const userData = useSelector((state: InitialState) => state.userData);
   useEffect(() => {
     const getUserData = async () => {
-      const { data } = await axios.post("/api/profile/get", {
+      const { data } = await api.post("/profile/get", {
         id: userData.id,
       });
       setUser(data.user);
@@ -40,7 +40,7 @@ const Settings = () => {
   const resetPasswordHandler = async () => {
     toast.loading("Initiating Password Reset..");
     try {
-      const resp = await axios.post("/api/auth/forget", { email: user.email });
+      await api.post("/auth/forget", { email: user.email });
       toast.dismiss();
       toast.success("Password Reset Link Send On Your Email");
     } catch (error: any) {
@@ -51,7 +51,7 @@ const Settings = () => {
   const logoutHandler = async () => {
     toast.loading("Initiating Logout..");
     try {
-      await axios.get("/api/auth/logout");
+      await api.get("/auth/logout");
       toast.dismiss();
       router.replace("/");
       toast.success("Logout Successfull");

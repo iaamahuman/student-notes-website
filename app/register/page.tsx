@@ -13,7 +13,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import axios from "axios";
+import { api } from "@/lib/api";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import Link from "next/link";
@@ -36,7 +36,7 @@ const Register = () => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     toast.loading("Creating Account...");
     try {
-      const resp = await axios.post("/api/auth/register", values);
+      const resp = await api.post("/auth/register", values);
       console.log(resp.data);
       toast.dismiss();
       toast.success("Account Created!");

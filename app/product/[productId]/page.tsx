@@ -1,5 +1,5 @@
 "use client";
-import axios from "axios";
+import { api } from "@/lib/api";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -35,8 +35,8 @@ const Product = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.post(
-          `/api/product/getproducts/${params.productId}`
+        const response = await api.post(
+          `/product/getproducts/${params.productId}`
         );
         setProduct(response.data);
         setLoading(false);
@@ -54,7 +54,7 @@ const Product = () => {
 
   useEffect(() => {
     const getCartDataFromDB = async () => {
-      const resp = await axios.post(`/api/cart/get/${userData.id}`);
+      const resp = await api.post(`/cart/get/${userData.id}`);
       if (resp.data !== "Cart not found") {
         dispatch(setCartData(resp.data));
       }
@@ -64,7 +64,7 @@ const Product = () => {
 
   const updateCartInDatabase = async (data: any) => {
     try {
-      await axios.post(`/api/cart/update/${cartData.id}`, data);
+      await api.post(`/cart/update/${cartData.id}`, data);
     } catch (error) {
       toast.error("Error updating cart!");
     }
@@ -72,7 +72,7 @@ const Product = () => {
 
   const createCartInDatabase = async (sendData: any) => {
     try {
-      const { data } = await axios.post("/api/cart/create", {
+      const { data } = await api.post("/cart/create", {
         ...sendData,
         userId: userData.id,
       });
@@ -212,7 +212,7 @@ const Product = () => {
     setProduct(updatedProduct);
 
     try {
-      await axios.post(`/api/product/updateproduct/${product.id}`, {
+      await api.post(`/product/updateproduct/${product.id}`, {
         quantity: 1,
         type: "dec",
       });
@@ -258,7 +258,7 @@ const Product = () => {
 
   const logoutHandler = async () => {
     try {
-      await axios.get("/api/auth/logout");
+      await api.get("/auth/logout");
       toast.dismiss();
     } catch (error: any) {
       toast.dismiss();

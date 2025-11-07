@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Faqs from "@/components/faqs";
-import axios from "axios";
+import { api } from "@/lib/api";
 import toast from "react-hot-toast";
 import ProductCategoryWise from "@/components/ProductCategoryWise";
 import Featured from "@/components/Featured";
@@ -22,7 +22,7 @@ const Home = () => {
   useEffect(() => {
     const getCategoryData = async () => {
       try {
-        const resp = await axios.post("/api/category/getcategory");
+        const resp = await api.post("/category/getcategory");
         setData(resp.data);
       } catch (error: any) {
         toast.error("Something Went Wrong!");

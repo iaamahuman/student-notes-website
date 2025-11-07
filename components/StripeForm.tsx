@@ -1,7 +1,7 @@
 import { setCartData } from "@/redux/actions";
 import { InitialState } from "@/redux/types";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
-import axios from "axios";
+import { api } from "@/lib/api";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import { toast } from "react-hot-toast";
@@ -54,19 +54,19 @@ const StripePaymentForm = ({
       setIsLoading(false);
     } else {
       try {
-        const response = await axios.post("/api/payments/create-payment", {
+        await api.post("/payments/create-payment", {
           paymentMethodId: paymentMethod?.id,
           amount: orderData.total * 100,
         });
         setIsLoading(false);
-        const { data } = await axios.post("/api/order/addorder", {
+        const { data } = await api.post("/order/addorder", {
           ...orderData,
         });
         const sendData = {
           id: cartData.id,
           products: [],
         };
-        await axios.post(`/api/cart/update/${cartData.id}`, sendData);
+        await api.post(`/cart/update/${cartData.id}`, sendData);
         dispatch(setCartData({ products: [], id: "" }));
         toast.dismiss();
         toast.success("Order Placed!");

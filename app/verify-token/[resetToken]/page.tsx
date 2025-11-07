@@ -13,7 +13,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import axios from "axios";
+import { api } from "@/lib/api";
 import { useParams, useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
@@ -21,7 +21,7 @@ const ForgetPassword = () => {
   useEffect(() => {
     const logoutHandler = async () => {
       try {
-        await axios.get("/api/auth/logout");
+        await api.get("/auth/logout");
       } catch (error: any) {
         toast.error(error.response.data);
       }
@@ -45,7 +45,7 @@ const ForgetPassword = () => {
     if (values.password === values.confirmpassword) {
       toast.loading("Updating Password..");
       try {
-        const resp = await axios.post("/api/auth/update-password", {
+        const resp = await api.post("/auth/update-password", {
           token: resetToken,
           password: values.password,
         });

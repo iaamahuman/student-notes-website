@@ -1,7 +1,7 @@
 "use client";
 import dateFormaterHandler from "@/helper/DateFormatter";
 import { InitialState } from "@/redux/types";
-import axios from "axios";
+import { api } from "@/lib/api";
 import { Activity } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -35,7 +35,7 @@ const MyOrders = () => {
   useEffect(() => {
     const getAllOrders = async () => {
       try {
-        const { data } = await axios.post("/api/order/getorder", {
+        const { data } = await api.post("/order/getorder", {
           userId: userData.id,
         });
         const updatedOrders = data.map((item: OrderData) => {

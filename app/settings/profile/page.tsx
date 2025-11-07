@@ -16,7 +16,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import axios from "axios";
+import { api } from "@/lib/api";
 import { useSelector } from "react-redux";
 import { toast } from "react-hot-toast";
 import { Oval } from "react-loader-spinner";
@@ -38,7 +38,7 @@ const Account = () => {
   useEffect(() => {
     const getUserProfile = async () => {
       try {
-        const resp = await axios.post("/api/profile/get", {
+        const resp = await api.post("/profile/get", {
           id: userData.id,
         });
         setData(resp.data.user);
@@ -79,10 +79,7 @@ const Account = () => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       toast.loading("Updating Profile");
-      const updateUser = await axios.put(
-        `/api/profile/update/${data.id}`,
-        values
-      );
+      await api.put(`/profile/update/${data.id}`, values);
       toast.dismiss();
       toast.success("Profile Updated");
     } catch (error: any) {

@@ -1,7 +1,7 @@
 "use client";
 import dateFormaterHandler from "@/helper/DateFormatter";
 import { InitialState } from "@/redux/types";
-import axios from "axios";
+import { api } from "@/lib/api";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
@@ -37,8 +37,8 @@ const GetOrder = () => {
   useEffect(() => {
     const getOrderDatahandler = async () => {
       try {
-        const { data } = await axios.post(
-          `/api/order/getorder/${param.orderId}`
+        const { data } = await api.post(
+          `/order/getorder/${param.orderId}`
         );
         if (userData.id === data.userId) {
           setOrderData({

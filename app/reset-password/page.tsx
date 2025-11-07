@@ -13,7 +13,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import axios from "axios";
+import { api } from "@/lib/api";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
@@ -34,7 +34,7 @@ const ResetPassword = () => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     toast.loading("Initiating Password Reset..");
     try {
-      const resp = await axios.post("/api/auth/forget", values);
+      const resp = await api.post("/auth/forget", values);
       toast.dismiss();
       toast.success(resp.data);
     } catch (error: any) {
