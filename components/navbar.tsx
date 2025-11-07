@@ -217,100 +217,129 @@ const Navbar = () => {
   };
 
   return (
-    <div className="border-b w-full bg-white relative shadow-md px-6 py-3 flex justify-between items-center">
+    <div className="border-b w-full bg-white relative shadow-sm px-4 md:px-6 py-4 flex justify-between items-center sticky top-0 z-50 backdrop-blur-sm bg-white/95">
       <div
-        className="font-semibold md:text-xl cursor-pointer flex justify-center items-center"
+        className="font-bold md:text-2xl cursor-pointer flex justify-center items-center text-blue-600 hover:text-blue-700 transition-colors"
         onClick={() => router.replace("/")}
       >
-        <Store className="mr-2 h-6 w-6 hidden md:block" /> Ecommercely
+        <Store className="mr-2 h-6 w-6 md:h-7 md:w-7" /> Ecommercely
       </div>
-      <div className="flex justify-center items-center">
-        <Link href={"/product"}>
-          <Search className="md:h-6 md:w-6 h-5 w-5 mr-5" />
+      <div className="flex justify-center items-center gap-4">
+        <Link
+          href={"/product"}
+          className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+        >
+          <Search className="md:h-6 md:w-6 h-5 w-5 text-gray-700" />
         </Link>
         <Sheet>
-          <SheetTrigger>
-            <ShoppingCart className="md:h-6 md:w-6 h-5 w-5 mr-4" />
+          <SheetTrigger className="relative p-2 hover:bg-gray-100 rounded-full transition-colors">
+            <ShoppingCart className="md:h-6 md:w-6 h-5 w-5 text-gray-700" />
+            {cartData?.products && cartData.products.length > 0 && (
+              <span className="absolute top-0 right-0 bg-blue-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                {cartData.products.length}
+              </span>
+            )}
           </SheetTrigger>
-          <SheetContent>
+          <SheetContent className="sm:max-w-lg w-full">
             <SheetHeader>
-              <SheetTitle>Your Shopping Cart</SheetTitle>
+              <SheetTitle className="text-xl md:text-2xl">Your Shopping Cart</SheetTitle>
               <SheetDescription>
                 Here are all the products you add to your cart.
               </SheetDescription>
               <div className="w-full pt-4">
-                {cartData?.products &&
-                Object.keys(cartData?.products).length > 0 ? (
-                  <div>
-                    {Object.keys(cartData?.products).map(
-                      (item: any, index: number) => (
+                {cartData?.products && cartData?.products?.length > 0 ? (
+                  <div className="space-y-4">
+                    <div className="max-h-[60vh] overflow-y-auto pr-2">
+                      {cartData.products.map((item: CartProduct, index: number) => (
                         <div
-                          key={cartData?.products[item]?.productId!}
-                          className="border-b mb-4 pb-4"
+                          key={item.productId}
+                          className="border-b border-gray-200 pb-4 mb-4 last:border-0 last:mb-0"
                         >
-                          <p
-                            className="font-medium text-xs md:text-sm cursor-pointer"
-                            onClick={() =>
-                              router.push(
-                                `product/${cartData?.products[item]?.productId}`
-                              )
-                            }
-                          >
-                            {index + 1}. {cartData?.products[item]?.name}
-                          </p>
-                          <div className="flex justify-between items-center w-[95%] md:w-[90%] mt-3">
-                            <div className="flex justify-center items-center bg-slate-200 rounded-md">
-                              <button
-                                className="flex justify-center items-center px-1 md:px-2 py-1 cursor-pointer"
+                          <div className="flex gap-3 mb-3">
+                            <div className="flex-1">
+                              <p
+                                className="font-semibold text-sm md:text-base cursor-pointer hover:text-blue-600 transition-colors"
                                 onClick={() =>
-                                  decrementCartProduct(
-                                    cartData?.products[item]?.productId,
-                                    cartData?.products[item]?.quantity
-                                  )
+                                  router.push(`/product/${item.productId}`)
                                 }
                               >
-                                <Minus size={16} className="mx-2" />
-                              </button>
-                              <p className="text-xs md:text-sm md:min-w-[20px] md:max-w-[20px] text-center">
-                                {cartData?.products[item]?.quantity?.toString()}
+                                {item.name}
                               </p>
-                              <button
-                                className="flex justify-center items-center px-1 md:px-2 py-1 cursor-pointer"
-                                onClick={() =>
-                                  incrementCartProduct(
-                                    cartData?.products[item]?.productId
-                                  )
-                                }
-                              >
-                                <Plus size={16} className="mx-2" />
-                              </button>
+                              <p className="text-xs text-gray-500 mt-1">
+                                {item.category}
+                              </p>
                             </div>
-                            <p className="text-xs md:text-sm">
-                              Price: ₹
-                              {cartData?.products[item]?.price.toString()}
-                            </p>
                             <button
-                              className="flex justify-center items-center px-2 py-1 cursor-pointer"
+                              className="text-red-500 hover:text-red-700 transition-colors p-1"
                               onClick={() =>
-                                removeProductFromCartHandler(
-                                  cartData?.products[item]?.productId
-                                )
+                                removeProductFromCartHandler(item.productId)
                               }
                             >
-                              <Trash size={16} className="mx-2" />
+                              <Trash size={18} />
                             </button>
                           </div>
+                          <div className="flex justify-between items-center">
+                            <div className="flex items-center bg-gray-100 rounded-lg">
+                              <button
+                                className="flex justify-center items-center px-3 py-2 hover:bg-gray-200 rounded-l-lg transition-colors"
+                                onClick={() =>
+                                  decrementCartProduct(item.productId, item.quantity)
+                                }
+                              >
+                                <Minus size={16} />
+                              </button>
+                              <p className="text-sm font-medium min-w-[40px] text-center">
+                                {item.quantity}
+                              </p>
+                              <button
+                                className="flex justify-center items-center px-3 py-2 hover:bg-gray-200 rounded-r-lg transition-colors"
+                                onClick={() =>
+                                  incrementCartProduct(item.productId)
+                                }
+                              >
+                                <Plus size={16} />
+                              </button>
+                            </div>
+                            <div className="text-right">
+                              <p className="text-sm text-gray-500">Price</p>
+                              <p className="text-base font-semibold">
+                                ₹{item.price}
+                              </p>
+                              <p className="text-xs text-gray-400">
+                                Total: ₹{item.price * item.quantity}
+                              </p>
+                            </div>
+                          </div>
                         </div>
-                      )
-                    )}
-                    <Button onClick={buyProductHandler}>Buy Now</Button>
-                    <Button
-                      onClick={clearCartHandler}
-                      variant={"secondary"}
-                      className="ml-3"
-                    >
-                      Clear Cart
-                    </Button>
+                      ))}
+                    </div>
+                    <div className="border-t pt-4 space-y-3 sticky bottom-0 bg-white">
+                      <div className="flex justify-between items-center text-lg font-bold">
+                        <span>Total:</span>
+                        <span>
+                          ₹
+                          {cartData.products.reduce(
+                            (sum, item) => sum + item.price * item.quantity,
+                            0
+                          )}
+                        </span>
+                      </div>
+                      <Button
+                        onClick={buyProductHandler}
+                        className="w-full"
+                        size="lg"
+                      >
+                        Proceed to Checkout
+                      </Button>
+                      <Button
+                        onClick={clearCartHandler}
+                        variant="outline"
+                        className="w-full"
+                        size="sm"
+                      >
+                        Clear Cart
+                      </Button>
+                    </div>
                   </div>
                 ) : (
                   <div className="flex justify-center items-center w-full h-[70vh] flex-col">
@@ -319,7 +348,10 @@ const Navbar = () => {
                       width={240}
                       alt="Cart Empty"
                     />
-                    <p className="font-semibold mt-6">Cart Is Empty</p>
+                    <p className="font-semibold mt-6 text-gray-600">Cart Is Empty</p>
+                    <p className="text-sm text-gray-400 mt-2">
+                      Add some products to get started
+                    </p>
                   </div>
                 )}
               </div>

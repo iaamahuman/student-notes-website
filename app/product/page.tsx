@@ -3,6 +3,7 @@ import ProductLoadingSkeleton from "@/components/ProductLoadingSkeleton";
 import ProductCard from "@/components/product-card";
 import { api } from "@/lib/api";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { Filter } from "lucide-react";
@@ -84,38 +85,53 @@ const Products = () => {
   }, [filter, backupData]);
 
   return (
-    <main className="w-full mx-auto flex justify-center items-center flex-col">
-      <section className="mx-auto flex justify-between items-center w-[90%] mt-6">
-        <Input
-          placeholder="Search Product Here..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="border-2 mr-2 focus-visible:ring-0 ring-0 text-xs md:text-base relative w-[85%] md:w-[40%]"
-        />
-        <DropdownMenu>
-          <DropdownMenuTrigger>
-            <Filter />
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuLabel>Price Filter</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem
-              onClick={() => setFilter({ type: "low", name: "price" })}
-            >
-              Low To High
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() => setFilter({ type: "high", name: "price" })}
-            >
-              High To Low
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </section>
-      {!loading && data.length === 0 && (
-        <p className="my-6">No Products At This Moment</p>
-      )}
-      <section className="grid md:grid-cols-5 grid-cols-2 gap-4 w-[90%] my-6">
+    <main className="min-h-screen w-full bg-gradient-to-b from-gray-50 to-white py-8">
+      <section className="w-full md:w-[90%] max-w-7xl mx-auto px-4">
+        <div className="mb-8">
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+            All Products
+          </h1>
+          <p className="text-gray-500">Browse our complete product catalog</p>
+        </div>
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-8 bg-white p-4 rounded-xl shadow-md border border-gray-200">
+          <Input
+            placeholder="Search products..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="flex-1 max-w-md border-2 focus-visible:ring-2 focus-visible:ring-blue-500"
+          />
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" className="gap-2">
+                <Filter className="h-4 w-4" />
+                Filter
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Sort by Price</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                onClick={() => setFilter({ type: "low", name: "price" })}
+              >
+                Low To High
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => setFilter({ type: "high", name: "price" })}
+              >
+                High To Low
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+        {!loading && data.length === 0 && (
+          <div className="text-center py-16">
+            <p className="text-xl text-gray-500 mb-2">No products found</p>
+            <p className="text-sm text-gray-400">
+              {search ? "Try a different search term" : "Check back later for new products"}
+            </p>
+          </div>
+        )}
+        <section className="grid md:grid-cols-5 grid-cols-2 gap-4 md:gap-6">
         {!loading &&
           data &&
           data.map((item: Product) => {
@@ -134,6 +150,7 @@ const Products = () => {
             <ProductLoadingSkeleton />
           </>
         )}
+        </section>
       </section>
     </main>
   );

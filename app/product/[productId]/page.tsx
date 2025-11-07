@@ -19,7 +19,9 @@ interface Product {
   price: number;
   image: string;
   id: string;
-  category: string;
+  Category: {
+    name: string;
+  };
   quantity: number;
 }
 
@@ -117,7 +119,7 @@ const Product = () => {
         quantity: 1,
         name: product!.product_name,
         price: product!.price,
-        category: product!.category,
+        category: product!.Category?.name,
       };
 
       updatedCart = [...cartData.products, newCartItem];
@@ -201,7 +203,7 @@ const Product = () => {
       quantity: 1,
       name: product.product_name,
       price: product.price,
-      category: product.category,
+      category: product.Category?.name,
     };
 
     const updatedProduct: Product = {
@@ -247,7 +249,7 @@ const Product = () => {
           quantity: 1,
           name: product.product_name,
           price: product.price,
-          category: product.category,
+          category: product.Category?.name,
         },
       ],
     };
@@ -266,74 +268,112 @@ const Product = () => {
   };
 
   return (
-    <main className="min-h-[100vh] w-full flex bg-[#f6f9fc] flex-col items-center">
+    <main className="min-h-screen w-full flex bg-gradient-to-b from-gray-50 to-white flex-col items-center py-8">
       {!loading && product && (
-        <section className="w-full md:w-[90%] my-6 flex justify-between items-start container flex-col md:flex-row">
-          <Image
-            src={product.image}
-            alt="product"
-            width={450}
-            height={300}
-            className="md:mr-10 w-[90%] md:w-[30%] max-h-[40vh] md:max-h-[60vh] object-contain mx-auto"
-          />
-          <div className="w-full md:w-[70%]">
-            <p className="font-semibold text-lg md:text-2xl mb-2 mt-4 md:mt-0">
-              {product.product_name}
-            </p>
-            <p className="mb-4 text-sm md:text-base">
-              {product.product_description}
-            </p>
-            <p className="font-semibold text-base md:text-xl mb-4">
-              ₹{product.price}
-            </p>
-            {product.quantity <= 0 && (
-              <p className="font-semibold text-red-500 text-lg mb-4">
-                Product Out Of Stock
-              </p>
-            )}
-            {product.quantity > 0 && (
-              <div className="flex">
-                <Button onClick={buyProductHandler}>Buy Now</Button>
-                {cartData.products.findIndex(
-                  (item: CartProduct) => item.productId === product.id
-                ) === -1 ? (
-                  <Button
-                    variant={"secondary"}
-                    className="ml-4"
-                    onClick={() => incrementCartProduct(product.id)}
-                  >
-                    Add To Cart
-                  </Button>
-                ) : (
-                  <div className="flex justify-center items-center bg-slate-100 border rounded-md ml-4">
-                    <span
-                      className="flex justify-center items-center px-2 py-1 cursor-pointer"
-                      onClick={() => decrementCartProduct(product.id)}
-                    >
-                      <Minus size={16} className="mx-2" />
+        <section className="w-full md:w-[90%] max-w-6xl mx-auto px-4">
+          <div className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
+            <div className="flex flex-col md:flex-row">
+              <div className="w-full md:w-1/2 bg-gray-50 flex items-center justify-center p-8 md:p-12">
+                <Image
+                  src={product.image}
+                  alt="product"
+                  width={500}
+                  height={500}
+                  className="w-full max-w-md h-auto object-contain"
+                />
+              </div>
+              <div className="w-full md:w-1/2 p-6 md:p-10 flex flex-col justify-between">
+                <div>
+                  <h1 className="font-bold text-2xl md:text-3xl mb-4 text-gray-900">
+                    {product.product_name}
+                  </h1>
+                  <div className="mb-4">
+                    <span className="inline-block px-3 py-1 bg-blue-100 text-blue-700 text-sm font-semibold rounded-full">
+                      {product?.Category?.name}
                     </span>
-                    <p className="text-sm min-w-[20px] max-w-[20px] text-center">
-                      {cartData.products.findIndex(
-                        (item: CartProduct) => item.productId === product.id
-                      ) === -1
-                        ? 0
-                        : cartData.products[
-                            cartData.products.findIndex(
-                              (item: CartProduct) =>
-                                item.productId === product.id
-                            )
-                          ].quantity}
+                  </div>
+                  <p className="text-gray-600 text-base md:text-lg mb-6 leading-relaxed">
+                    {product.product_description}
+                  </p>
+                  <div className="mb-6">
+                    <p className="text-3xl md:text-4xl font-bold text-blue-600 mb-2">
+                      ₹{product.price}
                     </p>
-                    <span
-                      className="flex justify-center items-center px-2 py-1 cursor-pointer"
-                      onClick={() => incrementCartProduct(product.id)}
-                    >
-                      <Plus size={16} className="mx-2" />
-                    </span>
+                    {product.quantity > 0 && (
+                      <p className="text-sm text-gray-500">
+                        {product.quantity} items in stock
+                      </p>
+                    )}
+                  </div>
+                </div>
+                {product.quantity <= 0 && (
+                  <div className="p-4 bg-red-50 border border-red-200 rounded-lg mb-6">
+                    <p className="font-semibold text-red-600 text-center">
+                      Product Out Of Stock
+                    </p>
+                  </div>
+                )}
+                {product.quantity > 0 && (
+                  <div className="space-y-4">
+                    {cartData.products.findIndex(
+                      (item: CartProduct) => item.productId === product.id
+                    ) === -1 ? (
+                      <div className="flex gap-4">
+                        <Button
+                          onClick={buyProductHandler}
+                          className="flex-1 py-6 text-lg font-semibold"
+                          size="lg"
+                        >
+                          Buy Now
+                        </Button>
+                        <Button
+                          variant="outline"
+                          className="flex-1 py-6 text-lg font-semibold"
+                          size="lg"
+                          onClick={() => incrementCartProduct(product.id)}
+                        >
+                          Add To Cart
+                        </Button>
+                      </div>
+                    ) : (
+                      <div className="space-y-4">
+                        <div className="flex items-center justify-center gap-4 bg-gray-100 rounded-lg p-4">
+                          <button
+                            className="flex justify-center items-center w-10 h-10 rounded-full hover:bg-gray-200 transition-colors"
+                            onClick={() => decrementCartProduct(product.id)}
+                          >
+                            <Minus size={20} />
+                          </button>
+                          <p className="text-xl font-semibold min-w-[40px] text-center">
+                            {
+                              cartData.products[
+                                cartData.products.findIndex(
+                                  (item: CartProduct) =>
+                                    item.productId === product.id
+                                )
+                              ].quantity
+                            }
+                          </p>
+                          <button
+                            className="flex justify-center items-center w-10 h-10 rounded-full hover:bg-gray-200 transition-colors"
+                            onClick={() => incrementCartProduct(product.id)}
+                          >
+                            <Plus size={20} />
+                          </button>
+                        </div>
+                        <Button
+                          onClick={buyProductHandler}
+                          className="w-full py-6 text-lg font-semibold"
+                          size="lg"
+                        >
+                          Buy Now
+                        </Button>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
-            )}
+            </div>
           </div>
         </section>
       )}
@@ -353,9 +393,11 @@ const Product = () => {
           />
         </div>
       )}
-      <div className="w-[90%] mx-auto my-6">
-        <Featured />
-      </div>
+      {!loading && product && (
+        <div className="w-full md:w-[90%] max-w-6xl mx-auto px-4 mt-12">
+          <Featured />
+        </div>
+      )}
     </main>
   );
 };

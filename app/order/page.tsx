@@ -52,134 +52,166 @@ const Order = () => {
   }, [router, userData]);
 
   return (
-    <section className="w-full">
-      <section className="md:container md:w-[90%] w-[85%] mx-auto my-6">
-        <div className="my-6">
-          <p className="font-bold text-lg md:text-2xl text-center">
-            Order Details
+    <section className="w-full min-h-screen bg-gradient-to-b from-gray-50 to-white py-8">
+      <section className="md:container md:w-[90%] w-[95%] mx-auto">
+        <div className="mb-8">
+          <h1 className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-2">
+            Checkout
+          </h1>
+          <p className="text-center text-gray-500">
+            Review your order and complete payment
           </p>
-          <div className="my-8">
-            <div className="w-full flex justify-evenly items-center mb-4 border-b pb-2">
-              <p className="w-3/5 text-sm md:text-base font-semibold">
-                Product Name
-              </p>
-              <p className="w-1/5 text-sm md:text-base font-semibold">Price</p>
-              <p className="w-1/5 text-sm md:text-base font-semibold">
-                Quantity
-              </p>
+        </div>
+
+        <div className="grid md:grid-cols-3 gap-6 mb-8">
+          <div className="md:col-span-2 space-y-6">
+            <div className="bg-white rounded-xl shadow-md border border-gray-200 p-6">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-xl font-semibold text-gray-800">
+                  Order Summary
+                </h2>
+                <span className="text-sm text-gray-500">
+                  {orderData.products.length} item
+                  {orderData.products.length !== 1 ? "s" : ""}
+                </span>
+              </div>
+              <div className="space-y-4">
+                {orderData &&
+                  orderData.products.map((item) => {
+                    return (
+                      <div
+                        key={item.productId}
+                        className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200"
+                      >
+                        <div className="flex-1">
+                          <p className="font-semibold text-gray-800">
+                            {item.name}
+                          </p>
+                          <p className="text-sm text-gray-500 mt-1">
+                            {item.category}
+                          </p>
+                        </div>
+                        <div className="flex items-center gap-6">
+                          <div className="text-center">
+                            <p className="text-xs text-gray-500">Quantity</p>
+                            <p className="font-semibold text-gray-800">
+                              {item.quantity}
+                            </p>
+                          </div>
+                          <div className="text-center min-w-[80px]">
+                            <p className="text-xs text-gray-500">Price</p>
+                            <p className="font-semibold text-gray-800">
+                              ₹{item.price}
+                            </p>
+                          </div>
+                          <div className="text-center min-w-[100px]">
+                            <p className="text-xs text-gray-500">Total</p>
+                            <p className="font-bold text-blue-600">
+                              ₹{item.price * item.quantity}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+              </div>
+              <div className="mt-6 pt-6 border-t border-gray-200">
+                <div className="flex justify-between items-center text-lg">
+                  <span className="font-semibold text-gray-700">
+                    Total Amount:
+                  </span>
+                  <span className="text-2xl font-bold text-blue-600">
+                    ₹{orderData.total}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center mt-2 text-sm text-gray-500">
+                  <span>Total Items:</span>
+                  <span>
+                    {orderData.products.reduce(
+                      (sum: number, item: OrderProduct) => sum + item.quantity,
+                      0
+                    )}
+                  </span>
+                </div>
+              </div>
             </div>
-            {orderData &&
-              orderData.products.map((item) => {
-                return (
-                  <div
-                    key={item.productId}
-                    className="w-full flex justify-evenly items-center my-2"
-                  >
-                    <p className="w-3/5 text-sm md:text-base">{item.name}</p>
-                    <p className="w-1/5 text-sm md:text-base">₹{item.price}</p>
-                    <p className="w-1/5 text-sm md:text-base">
-                      {item.quantity}
-                    </p>
-                  </div>
-                );
-              })}
-            <div className="w-full flex justify-evenly items-center mt-4 border-t pt-2">
-              <p className="w-3/5 text-sm md:text-base font-semibold">
-                Total Price and Quantity
-              </p>
-              <p className="w-1/5 text-sm md:text-base font-semibold">
-                ₹{orderData.total}
-              </p>
-              <p className="w-1/5 text-sm md:text-base font-semibold">
-                {orderData.products.reduce(
-                  (sum: number, item: OrderProduct) => sum + item.quantity,
-                  0
-                )}
-              </p>
+
+            <div className="bg-white rounded-xl shadow-md border border-gray-200 p-6">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-xl font-semibold text-gray-800">
+                  Delivery Information
+                </h2>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => router.push("/settings/profile")}
+                >
+                  Edit
+                </Button>
+              </div>
+              <div className="grid md:grid-cols-2 gap-4">
+                <div>
+                  <p className="text-xs text-gray-500 mb-1">Name</p>
+                  <p className="font-medium text-gray-800">{userProfile.name}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500 mb-1">Email</p>
+                  <p className="font-medium text-gray-800">
+                    {userProfile.email}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500 mb-1">Phone Number</p>
+                  <p className="font-medium text-gray-800">
+                    {userProfile.phoneno}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500 mb-1">Pincode</p>
+                  <p className="font-medium text-gray-800">
+                    {userProfile.pincode}
+                  </p>
+                </div>
+                <div className="md:col-span-2">
+                  <p className="text-xs text-gray-500 mb-1">Address</p>
+                  <p className="font-medium text-gray-800">
+                    {userProfile.address}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500 mb-1">City</p>
+                  <p className="font-medium text-gray-800">{userProfile.city}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500 mb-1">State</p>
+                  <p className="font-medium text-gray-800">
+                    {userProfile.state}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500 mb-1">Country</p>
+                  <p className="font-medium text-gray-800">
+                    {userProfile.country}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="md:col-span-1">
+            <div className="bg-white rounded-xl shadow-md border border-gray-200 p-6 sticky top-6">
+              <h2 className="text-xl font-semibold text-gray-800 mb-6">
+                Payment
+              </h2>
+              <Elements stripe={stripePromise}>
+                <StripePaymentForm
+                  orderData={orderData}
+                  customerName={userData.name}
+                />
+              </Elements>
             </div>
           </div>
         </div>
-        <div className="my-6">
-          <div className="flex justify-between items-baseline">
-            <p className="md:text-xl font-semibold">Profile Details</p>
-            <Button
-              variant={"outline"}
-              size={"sm"}
-              onClick={() => router.push("/settings/profile")}
-            >
-              Edit Profile
-            </Button>
-          </div>
-          <div className="my-8">
-            <p className="my-2">
-              <span className="font-medium text-sm md:text-base">Name: </span>
-              {userProfile.name}
-            </p>
-            <p className="my-2">
-              <span className="font-medium text-sm md:text-base">Email: </span>
-              {userProfile.email}
-            </p>
-            <p className="my-2">
-              <span className="font-medium text-sm md:text-base">
-                Phone Number:{" "}
-              </span>
-              {userProfile.phoneno}
-            </p>
-          </div>
-          <div className="my-6">
-            <div className="flex justify-between items-baseline">
-              <p className="md:text-xl font-semibold">Location Details</p>
-              <Button
-                variant={"outline"}
-                size={"sm"}
-                onClick={() => router.push("/settings/profile")}
-              >
-                Edit Profile
-              </Button>
-            </div>
-            <div className="my-8">
-              <p className="my-2">
-                <span className="font-medium text-sm md:text-base">
-                  Address:{" "}
-                </span>
-                {userProfile.address}
-              </p>
-              <p className="my-2">
-                <span className="font-medium text-sm md:text-base">
-                  Country:{" "}
-                </span>
-                {userProfile.country}
-              </p>
-              <p className="my-2">
-                <span className="font-medium text-sm md:text-base">
-                  State:{" "}
-                </span>
-                {userProfile.state}
-              </p>
-              <p className="my-2">
-                <span className="font-medium text-sm md:text-base">City: </span>
-                {userProfile.city}
-              </p>
-              <p className="my-2">
-                <span className="font-medium text-sm md:text-base">
-                  Pincode:{" "}
-                </span>
-                {userProfile.pincode}
-              </p>
-            </div>
-          </div>
-        </div>
-        <p className="md:text-xl font-semibold">Payment Details</p>
-        <Elements stripe={stripePromise}>
-          <StripePaymentForm
-            orderData={orderData}
-            customerName={userData.name}
-          />
-        </Elements>
-        <p className="my-5 text-center font-medium">
-          Note: For Testing Purpose Add Card No: 4242 4242 4242 4242 and rest
-          all details randomly.
-        </p>
       </section>
     </section>
   );

@@ -22,13 +22,13 @@ const ProductCategoryWise = ({
   products: Product[];
 }) => {
   return (
-    <div className="mb-10">
-      <p className="md:text-xl font-semibold flex items-center">
-        <Zap className="mr-2" />
-        {title}
-      </p>
+    <div className="mb-12">
+      <div className="flex items-center mb-2">
+        <Zap className="mr-2 h-5 w-5 md:h-6 md:w-6 text-blue-500 fill-blue-500" />
+        <p className="md:text-2xl text-xl font-bold text-gray-800">{title}</p>
+      </div>
       <Separator className="my-4" />
-      <div className="grid md:grid-cols-5 md:gap-4 grid-cols-2 gap-x-4 gap-y-6">
+      <div className="grid md:grid-cols-5 md:gap-6 grid-cols-2 gap-4">
         {products &&
           products.map((product: Product) => {
             if (product.visible) {

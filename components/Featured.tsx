@@ -42,13 +42,15 @@ const Featured = () => {
     }
   };
   return (
-    <div className="mb-10">
-      <p className="md:text-xl font-semibold flex items-center flex-wrap">
-        <Star className="mr-2" />
-        Featured Products
-      </p>
+    <div className="mb-12">
+      <div className="flex items-center mb-2">
+        <Star className="mr-2 h-5 w-5 md:h-6 md:w-6 text-yellow-500 fill-yellow-500" />
+        <p className="md:text-2xl text-xl font-bold text-gray-800">
+          Featured Products
+        </p>
+      </div>
       <Separator className="my-4" />
-      <div className="grid md:grid-cols-5 md:gap-4 grid-cols-2 gap-x-4 gap-y-6">
+      <div className="grid md:grid-cols-5 md:gap-6 grid-cols-2 gap-4">
         {!loading &&
           products &&
           products.map((product: Product) => {
