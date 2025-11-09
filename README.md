@@ -22,11 +22,7 @@ Ecommercely is a straightforward e-commerce project that illustrates the creatio
 🛒 Product Showcase and Cart: Users can explore a range of products, add items to their cart, and review their selections before proceeding to checkout.
 
 💳 Stripe Integration: Secure Stripe payment integration allows users to make seamless online transactions.
-## Live Website
 
-https://ecommercely.vercel.app
-
-Video Link: https://youtu.be/lvctTqk8i2E
 
 Admin Panel Github: https://github.com/krish-7104/ecommercely-admin
 
@@ -34,9 +30,73 @@ Admin Panel Github: https://github.com/krish-7104/ecommercely-admin
 
 To run this project, you will need to add the following environment variables to your .env file
 
-`DATABASE_URL`
-`SECRET_KEY`
-`NODEMAILER_USER`
-`NODEMAILER_PASS`
 `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`
-`STRIPE_SECRET_KEY`
+`NEXT_PUBLIC_ADMIN_API_BASE`
+
+## Setup
+
+### Prerequisites
+
+Before you begin, ensure you have the following installed:
+
+- **Node.js** (version 18.x or higher)
+- **npm** or **yarn** package manager
+- **Git**
+- **PostgreSQL database** (or Supabase account)
+- **Stripe account** (for payment integration)
+
+### Installation Steps
+
+1. **Clone the Repository**
+   ```bash
+   git clone https://github.com/krish-7104/ecommercely-website
+   cd ecommercely-website
+   ```
+
+2. **Install Dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Set Up Environment Variables**
+   
+   Copy the `.env.sample` file and create a `.env.local` file:
+   ```bash
+   cp .env.sample .env.local
+   ```
+   
+   Then update the values in `.env.local` with your actual credentials:
+   ```env
+   DATABASE_URL=your_database_connection_string
+   SECRET_KEY=your_secret_key_for_jwt_tokens
+   NODEMAILER_USER=your_email@gmail.com
+   NODEMAILER_PASS=your_email_app_password
+   NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=your_stripe_publishable_key
+   STRIPE_SECRET_KEY=your_stripe_secret_key
+   NEXT_PUBLIC_ADMIN_API_BASE=your_admin_api_base_url
+   ```
+
+4. **Database Setup**
+   - Set up your PostgreSQL database (or use Supabase)
+   - Update the `DATABASE_URL` in your `.env.local` file
+   - If using Prisma, run migrations:
+     ```bash
+     npx prisma migrate dev
+     ```
+
+5. **Run the Development Server**
+   ```bash
+   npm run dev
+   ```
+   
+   The application will be available at `http://localhost:3000`
+
+6. **Build for Production**
+   ```bash
+   npm run build
+   npm start
+   ```
+
+### Related Repositories
+
+- **Admin Panel**: https://github.com/krish-7104/ecommercely-admin
