@@ -8,12 +8,6 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-import { Elements } from "@stripe/react-stripe-js";
-import { loadStripe } from "@stripe/stripe-js";
-
-const stripePromise = loadStripe(
-  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || ""
-);
 
 const Order = () => {
   const router = useRouter();
@@ -203,12 +197,11 @@ const Order = () => {
               <h2 className="text-xl font-semibold text-gray-800 mb-6">
                 Payment
               </h2>
-              <Elements stripe={stripePromise}>
-                <StripePaymentForm
-                  orderData={orderData}
-                  customerName={userData.name}
-                />
-              </Elements>
+              <StripePaymentForm
+                orderData={orderData}
+                customerName={userData.name}
+                customerEmail={userProfile.email}
+              />
             </div>
           </div>
         </div>
