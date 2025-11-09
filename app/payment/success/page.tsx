@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { api } from "@/lib/api";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,30 +17,34 @@ const PaymentSuccess = () => {
   const [isProcessing, setIsProcessing] = useState(true);
   const [orderId, setOrderId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [hasProcessed, setHasProcessed] = useState(false);
+  const processingRef = useRef(false);
 
   const sessionId = searchParams.get("session_id");
 
   useEffect(() => {
-    if (hasProcessed) return;
+    if (processingRef.current) return;
+    if (!sessionId) {
+      setError("Invalid payment session");
+      setIsProcessing(false);
+      return;
+    }
 
-    const processPayment = async () => {
-      if (!sessionId) {
-        setError("No session ID found");
+    const processedKey = `payment_processed_${sessionId}`;
+    if (localStorage.getItem(processedKey)) {
+      const storedOrderId = localStorage.getItem(`order_id_${sessionId}`);
+      if (storedOrderId) {
+        setOrderId(storedOrderId);
         setIsProcessing(false);
         return;
       }
+    }
 
-      const processedKey = `payment_processed_${sessionId}`;
-      if (localStorage.getItem(processedKey)) {
-        const storedOrderId = localStorage.getItem(`order_id_${sessionId}`);
-        if (storedOrderId) {
-          setOrderId(storedOrderId);
-          setIsProcessing(false);
-          setHasProcessed(true);
-          return;
-        }
-      }
+    processingRef.current = true;
+
+    const currentOrderData = orderData;
+    const currentCartData = cartData;
+
+    const processPayment = async () => {
 
       try {
         const sessionResponse = await api.post(
@@ -68,15 +72,16 @@ const PaymentSuccess = () => {
               paymentIntentId: paymentIntentId,
               paymentStatus: "succeeded",
             };
-          } else if (orderData && orderData.products && orderData.products.length > 0) {
+          } else if (currentOrderData && currentOrderData.products && currentOrderData.products.length > 0) {
             orderPayload = {
-              ...orderData,
+              ...currentOrderData,
               paymentIntentId: paymentIntentId,
               paymentStatus: "succeeded",
             };
           } else {
             setError("Order data not found. Please contact support.");
             setIsProcessing(false);
+            processingRef.current = false;
             return;
           }
 
@@ -86,21 +91,21 @@ const PaymentSuccess = () => {
           localStorage.setItem(`payment_processed_${sessionId}`, "true");
           localStorage.setItem(`order_id_${sessionId}`, data.id);
 
-          if (cartData.id) {
+          if (currentCartData.id) {
             const sendData = {
-              id: cartData.id,
+              id: currentCartData.id,
               products: [],
             };
-            await api.post(`/cart/update/${cartData.id}`, sendData);
+            await api.post(`/cart/update/${currentCartData.id}`, sendData);
             dispatch(setCartData({ products: [], id: "" }));
           }
 
           toast.success("Payment successful! Order placed.");
           setIsProcessing(false);
-          setHasProcessed(true);
         } else {
           setError("Payment was not successful");
           setIsProcessing(false);
+          processingRef.current = false;
         }
       } catch (error: any) {
         console.error("Error processing payment:", error);
@@ -109,16 +114,12 @@ const PaymentSuccess = () => {
             "An error occurred while processing your payment."
         );
         setIsProcessing(false);
+        processingRef.current = false;
       }
     };
 
-    if (sessionId) {
-      processPayment();
-    } else {
-      setError("Invalid payment session");
-      setIsProcessing(false);
-    }
-  }, [sessionId, orderData, cartData, dispatch, hasProcessed]);
+    processPayment();
+  }, [sessionId, dispatch]);
 
   if (isProcessing) {
     return (
