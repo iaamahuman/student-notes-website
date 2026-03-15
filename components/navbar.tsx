@@ -222,7 +222,7 @@ const Navbar = () => {
         className="font-bold md:text-2xl cursor-pointer flex justify-center items-center text-blue-600 hover:text-blue-700 transition-colors"
         onClick={() => router.replace("/")}
       >
-        <Store className="mr-2 h-6 w-6 md:h-7 md:w-7" /> Ecommercely
+        <Store className="mr-2 h-6 w-6 md:h-7 md:w-7" /> Student Note Books
       </div>
       <div className="flex justify-center items-center gap-4">
         <Link

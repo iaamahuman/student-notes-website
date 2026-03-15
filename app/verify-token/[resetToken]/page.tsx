@@ -68,7 +68,7 @@ const ForgetPassword = () => {
       <div className="md:container w-[90%] md:w-[35%] bg-white shadow-lg border rounded-md px-7 py-5">
         {" "}
         <p className="text-xl font-semibold text-center mb-6">
-          Update Password - Ecommercely
+          Update Password - Student Note Books
         </p>
         <Form {...form}>
           <form

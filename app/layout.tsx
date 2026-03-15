@@ -8,7 +8,7 @@ import Footer from "@/components/footer";
 const montserrat = Montserrat({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Ecommercely Website - Krish Jotaniya",
+  title: "Student Note Books Website - Krish Jotaniya",
   description: "Buy the best product at cheaper rates",
 };
 

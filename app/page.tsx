@@ -44,7 +44,7 @@ const Home = () => {
             <div className="absolute inset-0 bg-gradient-to-r from-black/40 to-transparent"></div>
             <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10 text-white">
               <h1 className="text-2xl md:text-4xl font-bold mb-2">
-                Welcome to Ecommercely
+                Welcome to Student Note Books
               </h1>
               <p className="text-sm md:text-lg opacity-90">
                 Discover amazing products at unbeatable prices
