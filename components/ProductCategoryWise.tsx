@@ -1,7 +1,5 @@
 "use client";
 import ProductCard from "@/components/product-card";
-import { Separator } from "@/components/ui/separator";
-import { Zap } from "lucide-react";
 import React from "react";
 
 interface Product {
@@ -14,33 +12,23 @@ interface Product {
   category: String;
 }
 
-const ProductCategoryWise = ({
-  title,
-  products,
-}: {
-  title: string;
-  products: Product[];
-}) => {
+const ProductCategoryWise = ({ title, products }: { title: string; products: Product[] }) => {
   return (
-    <div className="mb-12">
-      <div className="flex items-center mb-2">
-        <Zap className="mr-2 h-5 w-5 md:h-6 md:w-6 text-blue-500 fill-blue-500" />
-        <p className="md:text-2xl text-xl font-bold text-gray-800">{title}</p>
+    <div className="mb-14">
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <p className="text-xs font-bold tracking-widest uppercase text-[#c8a96e] mb-1">Category</p>
+          <p className="text-2xl md:text-3xl font-black text-gray-900">{title}</p>
+        </div>
+        <a href="/product" className="px-5 py-2.5 rounded-md text-sm font-bold border border-gray-200 text-gray-700 hover:border-gray-900 hover:text-gray-900 transition-all">
+          View All →
+        </a>
       </div>
-      <Separator className="my-4" />
-      <div className="grid md:grid-cols-5 md:gap-6 grid-cols-2 gap-4">
-        {products &&
-          products.map((product: Product) => {
-            if (product.visible) {
-              return (
-                <ProductCard
-                  key={product.id}
-                  product={product}
-                  feature={true}
-                />
-              );
-            }
-          })}
+      <div className="grid md:grid-cols-5 md:gap-5 grid-cols-2 gap-3">
+        {products && products.map((product: Product) => {
+          if (product.visible)
+            return <ProductCard key={product.id} product={product} feature={true} />;
+        })}
       </div>
     </div>
   );

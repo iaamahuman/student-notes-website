@@ -2,41 +2,11 @@
 import ProductLoadingSkeleton from "@/components/ProductLoadingSkeleton";
 import ProductCard from "@/components/product-card";
 import { api } from "@/lib/api";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
-import { Filter } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 
-type Category = {
-  id: string;
-  name: string;
-  createdAt: string;
-  updatedAt: string;
-};
-
-type Product = {
-  id: string;
-  product_name: string;
-  product_description: string;
-  price: number;
-  quantity: number;
-  image: string;
-  createdAt: string;
-  updatedAt: string;
-  category: string;
-  featured: boolean;
-  visible: boolean;
-  Category: Category;
-};
+type Category = { id: string; name: string; createdAt: string; updatedAt: string; };
+type Product = { id: string; product_name: string; product_description: string; price: number; quantity: number; image: string; createdAt: string; updatedAt: string; category: string; featured: boolean; visible: boolean; Category: Category; };
 
 const Products = () => {
   const [search, setSearch] = useState("");
@@ -44,6 +14,7 @@ const Products = () => {
   const [data, setData] = useState<Product[]>([]);
   const [backupData, setBackupData] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     const getData = async () => {
       try {
@@ -61,10 +32,7 @@ const Products = () => {
 
   useEffect(() => {
     if (search !== "") {
-      const updatedData = backupData.filter((item) =>
-        item.product_name.toLowerCase().includes(search.toLowerCase())
-      );
-      setData(updatedData);
+      setData(backupData.filter(item => item.product_name.toLowerCase().includes(search.toLowerCase())));
     } else {
       setData(backupData);
     }
@@ -72,84 +40,79 @@ const Products = () => {
 
   useEffect(() => {
     if (filter.name === "price") {
-      let updatedData = [...backupData];
-      if (filter.type === "low") {
-        updatedData.sort((a, b) => a.price - b.price);
-      } else if (filter.type === "high") {
-        updatedData.sort((a, b) => b.price - a.price);
-      }
-      setData(updatedData);
+      let sorted = [...backupData];
+      sorted.sort((a, b) => filter.type === "low" ? a.price - b.price : b.price - a.price);
+      setData(sorted);
     } else {
       setData(backupData);
     }
   }, [filter, backupData]);
 
   return (
-    <main className="min-h-screen w-full bg-gradient-to-b from-gray-50 to-white py-8">
-      <section className="w-full md:w-[90%] max-w-7xl mx-auto px-4">
-        <div className="mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
-            All Products
-          </h1>
-          <p className="text-gray-500">Browse our complete product catalog</p>
-        </div>
-        <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-8 bg-white p-4 rounded-xl shadow-md border border-gray-200">
-          <Input
-            placeholder="Search products..."
+    <main className="min-h-screen w-full" style={{ background: "linear-gradient(135deg, #fff7ed 0%, #fdf2f8 50%, #eff6ff 100%)" }}>
+      {/* Header */}
+      <div className="w-full py-12 px-6 text-center" style={{ background: "linear-gradient(135deg, #f97316, #ec4899, #8b5cf6)" }}>
+        <h1 className="text-4xl md:text-5xl font-black text-white mb-3" style={{ fontFamily: "Georgia, serif" }}>All Products</h1>
+        <p className="text-white opacity-80 text-lg">Browse our complete stationery collection</p>
+      </div>
+
+      <section className="w-full md:w-[90%] max-w-7xl mx-auto px-4 py-8">
+        {/* Search + Filter bar */}
+        <div className="flex flex-col md:flex-row gap-3 mb-8 p-4 rounded-2xl" style={{ background: "white", boxShadow: "0 4px 20px rgba(249,115,22,0.1)" }}>
+          <input
+            placeholder="🔍  Search products..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="flex-1 max-w-md border-2 focus-visible:ring-2 focus-visible:ring-blue-500"
+            className="flex-1 px-4 py-3 rounded-xl border-2 border-orange-100 focus:outline-none focus:border-orange-400 text-gray-700"
+            style={{ background: "#fff7ed" }}
           />
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="gap-2">
-                <Filter className="h-4 w-4" />
-                Filter
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Sort by Price</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                onClick={() => setFilter({ type: "low", name: "price" })}
+          <div className="flex gap-2">
+            <button
+              onClick={() => setFilter({ type: "low", name: "price" })}
+              className="px-4 py-3 rounded-xl text-sm font-bold transition-all hover:scale-105"
+              style={{ background: filter.type === "low" ? "linear-gradient(135deg, #f97316, #ec4899)" : "#fff7ed", color: filter.type === "low" ? "white" : "#f97316" }}
+            >
+              ↑ Price
+            </button>
+            <button
+              onClick={() => setFilter({ type: "high", name: "price" })}
+              className="px-4 py-3 rounded-xl text-sm font-bold transition-all hover:scale-105"
+              style={{ background: filter.type === "high" ? "linear-gradient(135deg, #f97316, #ec4899)" : "#fff7ed", color: filter.type === "high" ? "white" : "#f97316" }}
+            >
+              ↓ Price
+            </button>
+            {filter.name && (
+              <button
+                onClick={() => setFilter({ name: "", type: "" })}
+                className="px-4 py-3 rounded-xl text-sm font-bold"
+                style={{ background: "#fee2e2", color: "#ef4444" }}
               >
-                Low To High
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() => setFilter({ type: "high", name: "price" })}
-              >
-                High To Low
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+                ✕ Clear
+              </button>
+            )}
+          </div>
         </div>
+
+        {/* Product count */}
+        {!loading && (
+          <p className="text-sm font-semibold text-gray-500 mb-6">
+            Showing <span style={{ color: "#f97316" }}>{data.length}</span> products
+          </p>
+        )}
+
         {!loading && data.length === 0 && (
-          <div className="text-center py-16">
-            <p className="text-xl text-gray-500 mb-2">No products found</p>
-            <p className="text-sm text-gray-400">
-              {search ? "Try a different search term" : "Check back later for new products"}
-            </p>
+          <div className="text-center py-24">
+            <div className="text-6xl mb-4">🔍</div>
+            <p className="text-xl font-bold text-gray-700 mb-2">No products found</p>
+            <p className="text-gray-400">{search ? "Try a different search term" : "Check back later"}</p>
           </div>
         )}
+
         <section className="grid md:grid-cols-5 grid-cols-2 gap-4 md:gap-6">
-        {!loading &&
-          data &&
-          data.map((item: Product) => {
-            return <ProductCard feature={false} product={item} key={item.id} />;
-          })}
-        {loading && (
-          <>
-            <ProductLoadingSkeleton />
-            <ProductLoadingSkeleton />
-            <ProductLoadingSkeleton />
-            <ProductLoadingSkeleton />
-            <ProductLoadingSkeleton />
-            <ProductLoadingSkeleton />
-            <ProductLoadingSkeleton />
-            <ProductLoadingSkeleton />
-            <ProductLoadingSkeleton />
-          </>
-        )}
+          {!loading && data && data.map((item: Product) => (
+            <ProductCard feature={false} product={item} key={item.id} />
+          ))}
+          {loading && Array(10).fill(0).map((_, i) => <ProductLoadingSkeleton key={i} />)}
         </section>
       </section>
     </main>

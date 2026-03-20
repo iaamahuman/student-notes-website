@@ -1,10 +1,6 @@
 "use client";
 import ProductCard from "@/components/product-card";
-import { Separator } from "@/components/ui/separator";
 import { api } from "@/lib/api";
-import { Star } from "lucide-react";
-import { Skeleton } from "@/components/ui/skeleton";
-import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import ProductLoadingSkeleton from "@/components/ProductLoadingSkeleton";
@@ -20,63 +16,42 @@ interface Product {
 }
 
 const Featured = () => {
-  const navigate = useRouter();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+
   useEffect(() => {
-    if (loading) {
-      getData();
-    }
+    if (loading) getData();
   }, [loading]);
-  const getData = async (): Promise<void> => {
+
+  const getData = async () => {
     try {
       const resp = await api.post("/product/getproducts");
       setProducts(resp.data);
       setLoading(false);
       toast.dismiss();
     } catch (error: any) {
-      setProducts([]);
       setLoading(false);
       toast.dismiss();
-      toast.error("Something Went Wrong!");
     }
   };
+
   return (
-    <div className="mb-12">
-      <div className="flex items-center mb-2">
-        <Star className="mr-2 h-5 w-5 md:h-6 md:w-6 text-yellow-500 fill-yellow-500" />
-        <p className="md:text-2xl text-xl font-bold text-gray-800">
-          Featured Products
-        </p>
+    <div className="mb-14">
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <p className="text-xs font-bold tracking-widest uppercase text-[#c8a96e] mb-1">Handpicked</p>
+          <p className="text-2xl md:text-3xl font-black text-gray-900">Featured Products</p>
+        </div>
+        <a href="/product" className="px-5 py-2.5 rounded-md text-sm font-bold border border-gray-200 text-gray-700 hover:border-gray-900 hover:text-gray-900 transition-all">
+          View All →
+        </a>
       </div>
-      <Separator className="my-4" />
-      <div className="grid md:grid-cols-5 md:gap-6 grid-cols-2 gap-4">
-        {!loading &&
-          products &&
-          products.map((product: Product) => {
-            if (product.visible && product.featured)
-              return (
-                <ProductCard
-                  key={product.id}
-                  product={product}
-                  feature={true}
-                />
-              );
-          })}
-        {loading && (
-          <>
-            <ProductLoadingSkeleton />
-            <ProductLoadingSkeleton />
-            <ProductLoadingSkeleton />
-            <ProductLoadingSkeleton />
-            <ProductLoadingSkeleton />
-            <ProductLoadingSkeleton />
-            <ProductLoadingSkeleton />
-            <ProductLoadingSkeleton />
-            <ProductLoadingSkeleton />
-            <ProductLoadingSkeleton />
-          </>
-        )}
+      <div className="grid md:grid-cols-5 md:gap-5 grid-cols-2 gap-3">
+        {!loading && products && products.map((product: Product) => {
+          if (product.visible && product.featured)
+            return <ProductCard key={product.id} product={product} feature={true} />;
+        })}
+        {loading && Array(10).fill(0).map((_, i) => <ProductLoadingSkeleton key={i} />)}
       </div>
     </div>
   );
