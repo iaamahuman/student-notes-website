@@ -194,7 +194,7 @@ const Product = () => {
 
   const buyProductHandler = async () => {
     if (!userData.id || !product) {
-      logoutHandler();
+      router.push("/login");
       return;
     }
 
