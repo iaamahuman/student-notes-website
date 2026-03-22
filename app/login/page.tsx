@@ -40,6 +40,7 @@ const Login = () => {
       const resp = await api.post("/auth/login", values);
       toast.success("Login Successfull");
       dispatch(setUserData(resp.data.user));
+      if (resp.data.token) localStorage.setItem("token", resp.data.token);
       toast.dismiss();
       router.replace("/");
     } catch (error: any) {
