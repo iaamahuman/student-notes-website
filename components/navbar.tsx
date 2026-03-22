@@ -37,20 +37,24 @@ const Navbar = () => {
   const pathname = usePathname();
   useEffect(() => {
     const getUserTokenData = async () => {
-      try {
-		  console.log("token in localStorage:", localStorage.getItem("token"));
-        const resp = await api.get("/auth/user");
-        dispatch(
-          setUserData({
-            name: resp.data.user.name,
-            email: resp.data.user.email,
-            id: resp.data.user.userId,
-          })
-        );
-      } catch (error) {
-        logoutHandler();
-      }
-    };
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+    const base64Payload = token.split('.')[1];
+    const payload = JSON.parse(atob(base64Payload));
+    if (payload.exp * 1000 < Date.now()) {
+      logoutHandler();
+      return;
+    }
+    dispatch(setUserData({
+      name: payload.name,
+      email: payload.email,
+      id: payload.userId,
+    }));
+  } catch (error) {
+    console.log("auth error:", error);
+  }
+};
 
     getUserTokenData();
   }, [dispatch]);
