@@ -38,6 +38,7 @@ const Navbar = () => {
   useEffect(() => {
     const getUserTokenData = async () => {
       try {
+		  console.log("token in localStorage:", localStorage.getItem("token"));
         const resp = await api.get("/auth/user");
         dispatch(
           setUserData({
