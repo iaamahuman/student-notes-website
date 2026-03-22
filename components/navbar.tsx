@@ -54,6 +54,7 @@ const Navbar = () => {
       logoutHandler();
       return;
     }
+    console.log("payload:", payload);
     dispatch(setUserData({
       name: payload.name,
       email: payload.email,
