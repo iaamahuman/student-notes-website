@@ -35,6 +35,14 @@ const Navbar = () => {
   const userData = useSelector((state: InitialState) => state.userData);
   const router = useRouter();
   const pathname = usePathname();
+  const logoutHandler = async () => {
+    try {
+      await api.get("/auth/logout");
+      toast.dismiss();
+    } catch (error: any) {
+      toast.dismiss();
+    }
+  };
   useEffect(() => {
     const getUserTokenData = async () => {
   try {
@@ -59,14 +67,7 @@ const Navbar = () => {
     getUserTokenData();
   }, [dispatch]);
 
-  const logoutHandler = async () => {
-    try {
-      await api.get("/auth/logout");
-      toast.dismiss();
-    } catch (error: any) {
-      toast.dismiss();
-    }
-  };
+  
 
   useEffect(() => {
     const getCartDataFromDB = async () => {
