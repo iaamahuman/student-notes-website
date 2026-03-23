@@ -24,7 +24,10 @@ const Login = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const formSchema = z.object({
-    email: z.string().nonempty(),
+    email: z.string().email("Invalid email").refine(
+  (email) => /^[^\s@]+@(gmail\.com|yahoo\.com|outlook\.com|hotmail\.com|icloud\.com|kongu\.edu\.in|kongu\.edu)$/.test(email),
+  { message: "Please use a valid email domain" }
+),
     password: z.string().nonempty(),
   });
   const form = useForm<z.infer<typeof formSchema>>({
