@@ -36,13 +36,15 @@ const Navbar = () => {
   const router = useRouter();
   const pathname = usePathname();
   const logoutHandler = async () => {
-    try {
-      await api.get("/auth/logout");
-      toast.dismiss();
-    } catch (error: any) {
-      toast.dismiss();
-    }
-  };
+  try {
+    await api.get("/auth/logout");
+  } catch (error: any) {}
+  localStorage.removeItem("token");
+  dispatch(setUserData({ name: "", email: "", id: "" }));
+  dispatch(setCartData({ products: [], id: "" }));
+  toast.dismiss();
+  router.push("/login");
+};
   useEffect(() => {
     const getUserTokenData = async () => {
   try {
