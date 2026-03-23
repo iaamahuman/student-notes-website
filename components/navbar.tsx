@@ -234,6 +234,7 @@ const Navbar = () => {
         <Store className="mr-2 h-6 w-6 md:h-7 md:w-7" /> Student Note Books
       </div>
       <div className="flex justify-center items-center gap-4">
+      {pathname !== "/login" && pathname !== "/register" && <>
         <Link
           href={"/product"}
           className="p-2 hover:bg-gray-100 rounded-full transition-colors"
@@ -367,6 +368,7 @@ const Navbar = () => {
             </SheetHeader>
           </SheetContent>
         </Sheet>
+        </>}
         {pathname !== "/login" &&
           pathname !== "/register" &&
           !pathname.includes("/settings/resetPassword") &&
