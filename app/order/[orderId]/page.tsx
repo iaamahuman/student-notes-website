@@ -66,8 +66,8 @@ const GetOrder = () => {
 <div className="mb-6">
   <p className="font-bold text-lg mb-4">Order Status</p>
   <div className="flex items-center gap-2">
-    {["Pending", "Processing", "Shipped", "Delivered"].map((step, index) => {
-      const steps = ["Pending", "Processing", "Shipped", "Delivered"];
+    {["Pending", "Shipping", "Delivered", "Cancelled"].map((step, index) => {
+  const steps = ["Pending", "Shipping", "Delivered", "Cancelled"];
       const currentIndex = steps.indexOf(orderData.status);
       const isCompleted = index <= currentIndex;
       return (
