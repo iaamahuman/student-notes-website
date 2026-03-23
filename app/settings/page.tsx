@@ -4,6 +4,8 @@ import { InitialState } from "@/redux/types";
 import { api } from "@/lib/api";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { setUserData, setCartData } from "@/redux/actions";
 import toast from "react-hot-toast";
 import { Activity } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -48,18 +50,19 @@ const Settings = () => {
       toast.error(error.message);
     }
   };
+  const dispatch = useDispatch();
   const logoutHandler = async () => {
-    toast.loading("Initiating Logout..");
-    try {
-      await api.get("/auth/logout");
-      toast.dismiss();
-      router.replace("/");
-      toast.success("Logout Successfull");
-    } catch (error: any) {
-      toast.dismiss();
-      toast.error(error.message);
-    }
-  };
+  toast.loading("Initiating Logout..");
+  try {
+    await api.get("/auth/logout");
+  } catch (error: any) {}
+  localStorage.removeItem("token");
+  dispatch(setUserData({ name: "", email: "", id: "" }));
+  dispatch(setCartData({ products: [], id: "" }));
+  toast.dismiss();
+  toast.success("Logout Successful");
+  router.push("/login");
+};
   return (
     <main className="flex w-full justify-center items-center">
       <section className="md:container w-[95%] md:w-[80%] my-10">
