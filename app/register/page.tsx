@@ -40,7 +40,7 @@ const Register = () => {
     toast.loading("Creating Account...");
     try {
       const resp = await api.post("/auth/register", values);
-      console.log(resp.data);
+if (resp.data.token) localStorage.setItem("token", resp.data.token);
       toast.dismiss();
       toast.success("Account Created!");
       router.replace("/");
