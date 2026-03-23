@@ -62,12 +62,28 @@ const GetOrder = () => {
       {!loading && orderData.id !== "" && (
         <section className="mx-auto py-8 md:container w-[90%] md:w-[75%] md:min-h-[50vh] rounded-md border px-4 flex justify-evenly items-center flex-col-reverse md:flex-row">
           <div>
-            <p className="bg-[#272e3f] inline-block text-white px-2 py-1 mb-2 text-xs font-medium rounded tracking-wider">
-              {orderData.status}
-            </p>
-            <p className="my-3 text-slate-700">
-              Your order has been placed and will soon reach to you!
-            </p>
+            {/* Order Status Timeline */}
+<div className="mb-6">
+  <p className="font-bold text-lg mb-4">Order Status</p>
+  <div className="flex items-center gap-2">
+    {["Pending", "Processing", "Shipped", "Delivered"].map((step, index) => {
+      const steps = ["Pending", "Processing", "Shipped", "Delivered"];
+      const currentIndex = steps.indexOf(orderData.status);
+      const isCompleted = index <= currentIndex;
+      return (
+        <div key={step} className="flex items-center">
+          <div className="flex flex-col items-center">
+            <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${isCompleted ? "bg-gray-900 text-white" : "bg-gray-200 text-gray-500"}`}>
+              {index + 1}
+            </div>
+            <p className={`text-xs mt-1 ${isCompleted ? "text-gray-900 font-semibold" : "text-gray-400"}`}>{step}</p>
+          </div>
+          {index < 3 && <div className={`h-1 w-8 mx-1 mb-4 ${index < currentIndex ? "bg-gray-900" : "bg-gray-200"}`} />}
+        </div>
+      );
+    })}
+  </div>
+</div>
             <div className="w-full flex justify-start items-start mt-6 mb-4 border-b pb-2">
               <p className="w-3/4 font-semibold text-sm md:text-base">
                 Product
