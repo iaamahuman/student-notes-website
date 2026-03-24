@@ -1,7 +1,7 @@
 
-# Ecommercely
+# Student Note Books
 
-Ecommercely is a straightforward e-commerce project that illustrates the creation of a user-friendly online shopping platform. It encompasses features such as user authentication, product listing, cart functionality, and Stripe payment integration.
+Student Note Books is a straightforward e-commerce project that illustrates the creation of a user-friendly online shopping platform. It encompasses features such as user authentication, product listing, cart functionality, and Stripe payment integration.
 
 ## Tech Stack
 

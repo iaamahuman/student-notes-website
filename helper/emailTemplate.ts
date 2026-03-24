@@ -1,4 +1,9 @@
 export const templateHandler = (name: string, token: string) => {
+  const websiteBaseUrl =
+    process.env.NEXT_PUBLIC_BASE_URL ||
+    process.env.NEXT_PUBLIC_WEBSITE_URL ||
+    "http://localhost:3000";
+
   return `
     <html>
       <head>
@@ -437,15 +442,15 @@ export const templateHandler = (name: string, token: string) => {
       <![endif]-->
       </head>
       <body>
-        <span class="preheader">Use this link to reset your password. The link is only valid for 24 hours.</span>
+        <span class="preheader">Use this link to reset your password. The link is only valid for 2 hours.</span>
         <table class="email-wrapper" width="100%" cellpadding="0" cellspacing="0" role="presentation">
           <tr>
             <td align="center">
               <table class="email-content" width="100%" cellpadding="0" cellspacing="0" role="presentation">
                 <tr>
                   <td class="email-masthead">
-                    <a href="https://ecommercely.vercel.app" class="f-fallback email-masthead_name">
-                    Student Note Books - Ecommerce Website
+                    <a href="${websiteBaseUrl}" class="f-fallback email-masthead_name">
+                    Student Note Books
                   </a>
                   </td>
                 </tr>
@@ -468,7 +473,7 @@ export const templateHandler = (name: string, token: string) => {
                                   <table width="100%" border="0" cellspacing="0" cellpadding="0" role="presentation">
                                     <tr>
                                       <td align="center">
-                                        <a href=https://ecommercely.vercel.app/verify-token/${token} class="f-fallback button button--green" target="_blank">Reset your password</a>
+                                        <a href="${websiteBaseUrl}/verify-token/${token}" class="f-fallback button button--green" target="_blank">Reset your password</a>
                                       </td>
                                     </tr>
                                   </table>
@@ -477,7 +482,7 @@ export const templateHandler = (name: string, token: string) => {
                             </table>
                             <p>If you did not request a password reset, please ignore this email.</p>
                             <p>Thanks,
-                              <br>The Student Note Books team<br>Krish Jotaniya</p>
+                              <br>The Student Note Books team</p>
                             <!-- Sub copy -->
                             <table class="body-sub" role="presentation">
            
